@@ -1,0 +1,56 @@
+package com.flyway.service;
+
+import com.flyway.entity.Role;
+import com.flyway.repository.RoleRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+@Service
+public class RoleServiceImp implements RoleService {
+    private final RoleRepository roleRepositoryl;
+
+    public RoleServiceImp(RoleRepository roleRepositoryl) {
+        this.roleRepositoryl = roleRepositoryl;
+    }
+
+    @Override
+    public Role createRole(Role role) {
+        return roleRepositoryl.save(role);
+    }
+
+    @Override
+    public List<Role> createRole(List<Role> role) {
+        return roleRepositoryl.saveAll(role);
+    }
+
+    @Override
+    public Role getRole(Long id) {
+      return roleRepositoryl.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<Role> getAllRoles() {
+        return roleRepositoryl.findAll();
+    }
+
+    @Override
+    public Role updateRole(Role role) {
+        Optional<?> optional =roleRepositoryl.findById(role.getId());
+        if (optional.isPresent()){
+          //  return roleRepositoryl.save(role);
+            Role role1=(Role)optional.get();
+            if (role.getName() != null){
+                role1.setName(role.getName());
+            }
+           return roleRepositoryl.save(role1);
+        }
+    return null;
+    }
+
+    @Override
+    public void deleteRole(Long id) {
+        roleRepositoryl.deleteById(id);
+    }
+
+}
